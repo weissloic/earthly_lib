@@ -1,16 +1,18 @@
 VERSION 0.8
 
 ARG --global DEFAULT_COMMIT_MESSAGE="[] - Update"
+ARG --global MAIN_BRANCH="main"
 
 PUSH_GIT:
     FUNCTION
 
     ARG src
     ARG commit=$DEFAULT_COMMIT_MESSAGE
+    ARG branch=${MAIN_BRANCH}
 
     RUN git add ${src}
     RUN git commit --allow-empty -m "${commit}"
 
     RUN --push --secret GIT_CI_USERNAME \
         --secret GIT_PASSWORD \
-        git push https://${GIT_CI_USERNAME}:${GIT_PASSWORD}@${GIT_HUGO_REPOSITORY} HEAD:${MAIN_BRANCH}
+        git push https://${GIT_CI_USERNAME}:${GIT_PASSWORD}@${GIT_HUGO_REPOSITORY} HEAD:${branch}
