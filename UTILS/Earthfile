@@ -1,0 +1,9 @@
+VERSION 0.8
+
+MY_COPY:
+    FUNCTION
+
+    ARG src
+    ARG dest=./
+    ARG recursive=true
+    RUN cp $(if $recursive =  "true"; then printf -- -r; fi) "$src" "$dest"

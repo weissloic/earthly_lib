@@ -3,7 +3,7 @@ VERSION 0.8
 ARG --global DEFAULT_COMMIT_MESSAGE="[] - Update"
 ARG --global MAIN_BRANCH="main"
 ARG --global GIT_HUGO_REPOSITORY="github.com/myrepo"
-
+ARG --global DEFAULT_USER_MAIL_CI_PUSHER="ci.myrepo@github.com"
 
 PUSH_GIT:
     FUNCTION
@@ -18,3 +18,31 @@ PUSH_GIT:
     RUN --push --secret GIT_CI_USERNAME \
         --secret GIT_PASSWORD \
         git push https://${GIT_CI_USERNAME}:${GIT_PASSWORD}@${GIT_HUGO_REPOSITORY} HEAD:${branch}
+
+CONFIGURE_GIT:
+    FUNCTION
+
+    RUN git config user.email $DEFAULT_USER_MAIL_CI_PUSHER
+    RUN --secret GIT_CI_USERNAME \
+        git config user.name $GIT_CI_USERNAME
+
+SWITCH_BRANCH_GIT:
+    FUNCTION
+
+    ARG branch_name=${MAIN_BRANCH}
+
+    RUN git checkout ${branch_name}
+    RUN git pull origin ${branch_name}
+
+
+DEEP_CLONE_REPO_GIT:
+    FUNCTION
+
+    ARG workdir_path=${DEFAULT_WORKDIR}
+
+    GIT CLONE https://${GIT_HUGO_REPOSITORY} ${workdir_path}
+    WORKDIR ${workdir_path}
+
+    ARG git_hash=$(git rev-parse HEAD)
+    RUN --secret GIT_PASSWORD git remote set-url origin https://nonused:${GIT_PASSWORD}@${GIT_HUGO_REPOSITORY}
+    RUN git fetch --unshallow
