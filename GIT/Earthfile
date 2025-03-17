@@ -2,6 +2,8 @@ VERSION 0.8
 
 ARG --global DEFAULT_COMMIT_MESSAGE="[] - Update"
 ARG --global MAIN_BRANCH="main"
+ARG --global GIT_HUGO_REPOSITORY="github.com/myrepo"
+
 
 PUSH_GIT:
     FUNCTION
