@@ -4,6 +4,8 @@ ARG --global DEFAULT_COMMIT_MESSAGE="[] - Update"
 ARG --global MAIN_BRANCH="main"
 ARG --global GIT_HUGO_REPOSITORY="github.com/myrepo"
 ARG --global DEFAULT_USER_MAIL_CI_PUSHER="ci.myrepo@github.com"
+ARG --global DEFAULT_WORKDIR="/app"
+
 
 PUSH_GIT:
     FUNCTION
